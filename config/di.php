@@ -78,6 +78,5 @@ return [
     // Models Repository
     \Mlab\Webhook\Models\FailedJob::class => \DI\create(Mlab\Webhook\Models\FailedJob::class)
         ->constructor(\DI\get(\Mlab\Webhook\Repositories\QueueRepository::class)),
-
     
 ];
