@@ -26,5 +26,12 @@
         "id": "8aa3df1e-ff0b-4215-876e-1bb9481dbcc8",
         "createdAt": "2025-03-11T13:06:11+00:00",
         "updatedAt": "2025-03-11T13:06:11+00:00"
+    },
+    "cf395e2e-24bb-43a0-9956-21de6cb21679": {
+        "queueName": "marco",
+        "followUpUri": "http:\/\/localhost",
+        "id": "cf395e2e-24bb-43a0-9956-21de6cb21679",
+        "createdAt": "2025-03-12T08:36:22+00:00",
+        "updatedAt": "2025-03-12T08:36:22+00:00"
     }
 }

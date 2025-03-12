@@ -79,7 +79,8 @@ final class Webhook implements RequestEntityInterface {
         } else {
             $client = new $this->client();
         }
-        
+
+        /** @var \Mlab\Webhook\Services\Interfaces\Client $client */
         return $client->request($this->method, $this->path, $this->payload);
     }
 

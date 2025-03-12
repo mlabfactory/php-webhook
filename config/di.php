@@ -2,7 +2,6 @@
 
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Psr7\Request;
-use Mdf\JsonStorage\Service\DbService;
 use Mlab\Webhook\Entities\Http\HttpRequest;
 use Mlab\Webhook\Helpers\Logger;
 use Mlab\Webhook\Services\ClientService;
@@ -66,11 +65,19 @@ return [
                 ->pipe($container->get(\Mlab\Webhook\Http\Middleware\AuthMiddleware::class));
         return $pipeline;
     },
+    
+    'mysql-service' => \DI\create(\Mlab\Webhook\Services\DbServiceConnection::class)
+        ->constructor($_connection->getDefaultConnection()),
 
     // Repositories
-    Mlab\Webhook\Repositories\WebHookRepository::class => \DI\create(Mlab\Webhook\Repositories\WebHookRepository::class)
+    \Mlab\Webhook\Repositories\WebHookRepository::class => \DI\create(Mlab\Webhook\Repositories\WebHookRepository::class)
         ->constructor(\DI\get('Queue-dbservice')),
+    \Mlab\Webhook\Repositories\QueueRepository::class => \DI\create(\Mlab\Webhook\Repositories\QueueRepository::class)
+        ->constructor(\DI\get('mysql-service')),
         
+    // Models Repository
+    \Mlab\Webhook\Models\FailedJob::class => \DI\create(Mlab\Webhook\Models\FailedJob::class)
+        ->constructor(\DI\get(\Mlab\Webhook\Repositories\QueueRepository::class)),
 
     
 ];

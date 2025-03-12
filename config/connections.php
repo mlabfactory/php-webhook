@@ -6,7 +6,8 @@ use Illuminate\Database\Query\Grammars\MySqlGrammar;
 
 class Connection implements ConnectionResolverInterface {
 
-    protected $connections;
+    protected array $connections;
+    private array $configurations;
 
     public function connection($name = null)
     {   
@@ -43,7 +44,7 @@ class Connection implements ConnectionResolverInterface {
         }
     }
 
-    public function getDefaultConnection()
+    public function getDefaultConnection(): array
     {
         return $this->connections;
     }
@@ -53,6 +54,7 @@ class Connection implements ConnectionResolverInterface {
         $connections = [
             'mysql' => [
                 'adapter' => 'mysql',
+                'driver' => 'mysql',
                 'host' => env('DB_HOST', 'localhost'),
                 'name' => env('DB_DATABASE', 'database_name'),
                 'user' => env('DB_USERNAME', 'username'),
@@ -62,6 +64,7 @@ class Connection implements ConnectionResolverInterface {
             ],
             'pgsql' => [
                 'adapter' => 'pgsql',
+                'driver' => 'pgsql',
                 'host' => env('DB_HOST', 'localhost'),
                 'name' => env('DB_DATABASE', 'database_name'),
                 'user' => env('DB_USERNAME', 'username'),
@@ -75,6 +78,7 @@ class Connection implements ConnectionResolverInterface {
             ],
             'mongodb' => [
                 'adapter' => 'mongodb',
+                'driver' => 'mongodb',
                 'host' => env('DB_HOST', 'localhost'),
                 'name' => env('DB_DATABASE', 'database_name'),
                 'user' => env('DB_USERNAME', 'username'),
@@ -83,6 +87,7 @@ class Connection implements ConnectionResolverInterface {
             ],
             'redis' => [
                 'adapter' => 'redis',
+                'driver' => 'redis',
                 'host' => env('DB_HOST', 'localhost'),
                 'user' => env('DB_USERNAME', ''),
                 'pass' => env('DB_PASSWORD', ''),
@@ -94,7 +99,19 @@ class Connection implements ConnectionResolverInterface {
             throw new \InvalidArgumentException('Unsupported connection name: ' . $name);
         }
 
+        $this->configurations = $connections;
         $this->connections = $connections[$name];
+    }
+
+    /**
+     * Get the value of configurations
+     *
+     * @return array
+     */
+    public function getConfigurations(): array
+    {
+        $this->configurations['default'] = $this->connections;
+        return $this->configurations;
     }
 }
 

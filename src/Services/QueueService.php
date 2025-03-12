@@ -2,12 +2,15 @@
 
 namespace Mlab\Webhook\Services;
 
+use Carbon\Carbon;
+use Exception;
 use Mlab\Webhook\Helpers\Logger;
 use Mlab\Webhook\Entities\Webhook;
 use Illuminate\Queue\Jobs\DatabaseJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Mlab\Webhook\Services\Interfaces\Client;
 use Illuminate\Queue\Capsule\Manager as Queue;
+use Mlab\Webhook\Models\FailedJob;
 use Mlab\Webhook\Services\Queue\ProcessWebhookJob;
 use Mlab\Webhook\Traits\WebhookHandler;
 
@@ -80,9 +83,7 @@ class QueueService implements ShouldQueue
             while ($processed < $this->batchSize) {
                 $job = $queue->pop();
                 if ($job instanceof DatabaseJob) {
-                    if(!$this->processJob($job)) {
-                        $this->fail($job);
-                    }
+                    $this->processJob($job);
                     $processed++;
                 } else {
                     Logger::warning('Job non valido ricevuto dalla coda');
@@ -97,7 +98,7 @@ class QueueService implements ShouldQueue
             
 
         } catch (\Exception $e) {
-            Logger::error('Errore durante l
+            Logger::critical('Errore durante l
             \'elaborazione della coda', [
                 'error' => $e->getMessage()
             ]);
@@ -112,11 +113,11 @@ class QueueService implements ShouldQueue
      * processing logic specific to the job type.
      * 
      * @param DatabaseJob $job The job to be processed
-     * @return bool True if the job was processed successfully, false otherwise
+     * @return void
      * 
      * @throws \Exception If there is an error during job processing
      */
-    private function processJob(DatabaseJob $job): bool
+    private function processJob(DatabaseJob $job): void
     {
         try {
 
@@ -125,16 +126,15 @@ class QueueService implements ShouldQueue
             );
 
             if($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
-                throw new \Exception('Errore durante l\'invio del webhook');
+                throw new \Mlab\Webhook\Services\Queue\QueueProcessingException('Errore durante l\'invio del webhook', $response);
             }
 
             $job->delete();
             Logger::info('Webhook inviato con successo', $job->payload());
 
-            return true;
 
         } catch (\Exception $e) {
-            $this->fail($job);
+            $this->fail($job, $e);
 
             Logger::error('Errore nell\'elaborazione del job', [
                 'error' => $e->getMessage(),
@@ -142,7 +142,6 @@ class QueueService implements ShouldQueue
                 'payload' => $job->payload()
             ]);
 
-            return false;
         }
     }
 
@@ -156,10 +155,26 @@ class QueueService implements ShouldQueue
      * @return void
      * @throws \Exception Potentially thrown by database operations
      */
-    protected function fail(DatabaseJob $job) {
-        
-        $this->retry($job, $job->attempts(), 3);
+    protected function fail(DatabaseJob $job, Exception $e) {
 
+        if ($job->attempts() >= 3) {
+            $job->markAsFailed();
+            
+            FailedJob::create([
+                'connection' => $this->queue->getQueueManager()->getName(),
+                'queue' => $job->getQueue(),
+                'payload' => $job->getRawBody(),
+                'exception' => $e->getMessage(),
+                'failed_at' => Carbon::now()->toAtomString()
+            ]);
+
+            Logger::info('Job saved on failed table', [
+                'job_id' => $job->getJobId(),
+                'payload' => $job->payload()
+            ]);
+        } else {
+            $this->retry($job, $job->attempts(), 3);
+        }
     }
 
     /**

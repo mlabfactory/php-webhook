@@ -41,6 +41,7 @@ $facade = require __DIR__ . '/../config/facade.php';
 
 require_once __DIR__ . '/../config/middleware.php';
 
+
 switch ($routeInfo[0]) {
     case \FastRoute\Dispatcher::NOT_FOUND:
         response(404, '404 Not Found');
