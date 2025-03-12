@@ -30,7 +30,7 @@ if(!function_exists('response')) {
     function response(int $status = 200, string $body = '') {
         header('Content-Type: application/json');
         http_response_code($status);
-        echo json_encode($body);
+        echo $body;
     }
 }
 

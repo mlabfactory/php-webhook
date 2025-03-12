@@ -20,12 +20,12 @@ class QueueController {
     public function handle(Request $request): \Psr\Http\Message\ResponseInterface
     {
         $body = $request->payload();
-        $followUpUri = $body['followUpUri'];
+        $domain = $body['domain'];
 
         $service = $this->repository;
         $queue = QueueMapperModel::create(
             [
-                'followUpUri' => $followUpUri,
+                'domain' => $domain,
             ]
         );
         $service->insert(

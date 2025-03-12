@@ -83,6 +83,6 @@ class WebhookController extends Controller
             return null;
         }
 
-        return $queue['followUpUri'];
+        return $queue['domain'];
     }
 }

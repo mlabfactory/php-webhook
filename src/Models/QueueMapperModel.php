@@ -6,64 +6,38 @@ use Mdf\JsonStorage\Domain\Model\JsonModelInterface;
 
 class QueueMapperModel extends JsonModel implements JsonModelInterface {
 
-    private string $queueName;
-    private string $followUpUri;
+    private string $domain;
 
     public static function create(array $data): JsonModelInterface
     {
         $model = new self();
-        $model->setQueueName($data['queueName']);
-        $model->setFollowUpUri($data['followUpUri']);
+        $model->setDomain($data['domain']);
         
         return $model;
     }
 
+
     /**
-     * Set the value of queueName
+     * Set the value of domain
      *
-     * @param string $queueName
+     * @param string $domain
      *
      * @return self
      */
-    public function setQueueName(string $queueName): self
+    public function setDomain(string $domain): self
     {
-        $this->queueName = $queueName;
-
-        return $this;
-    }
-
-
-    /**
-     * Set the value of followUpUri
-     *
-     * @param string $followUpUri
-     *
-     * @return self
-     */
-    public function setFollowUpUri(string $followUpUri): self
-    {
-        $this->followUpUri = $followUpUri;
+        $this->domain = $domain;
 
         return $this;
     }
 
     /**
-     * Get the value of queueName
+     * Get the value of domain
      *
      * @return string
      */
-    public function getQueueName(): string
+    public function getdomain(): string
     {
-        return $this->queueName;
-    }
-
-    /**
-     * Get the value of followUpUri
-     *
-     * @return string
-     */
-    public function getFollowUpUri(): string
-    {
-        return $this->followUpUri;
+        return $this->domain;
     }
 }

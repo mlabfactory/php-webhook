@@ -42,22 +42,27 @@ $facade = require __DIR__ . '/../config/facade.php';
 require_once __DIR__ . '/../config/middleware.php';
 
 
-switch ($routeInfo[0]) {
-    case \FastRoute\Dispatcher::NOT_FOUND:
-        response(404, '404 Not Found');
-        break;
-    case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        response(405, '405 Method Not Allowed');
-        break;
-    case \FastRoute\Dispatcher::FOUND:
-        [$controller, $method] = $routeInfo[1];
-        $controller = $container->get($controller);
-        $request = $container->get(\Mlab\Webhook\Entities\Http\HttpRequest::class);
-
-        $vars = $routeInfo[2];
-        $response = $pipeline->process($request, function ($request) use ($controller, $method, $vars) {
-            return $controller->$method($request, ...$vars);
-        });
-        echo $response->getBody();
-        break;
+try {
+    switch ($routeInfo[0]) {
+        case \FastRoute\Dispatcher::NOT_FOUND:
+            response(404, '404 Not Found');
+            break;
+        case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+            response(405, '405 Method Not Allowed');
+            break;
+        case \FastRoute\Dispatcher::FOUND:
+            [$controller, $method] = $routeInfo[1];
+            $controller = $container->get($controller);
+            $request = $container->get(\Mlab\Webhook\Entities\Http\HttpRequest::class);
+    
+            $vars = $routeInfo[2];
+            $response = $pipeline->process($request, function ($request) use ($controller, $method, $vars) {
+                return $controller->$method($request, ...$vars);
+            });
+            $body = $response->getBody();
+            response($response->getStatusCode(), $body);
+            break;
+    }
+} catch (\Exception $e) {
+    response(500, '500 Internal Server Error');
 }

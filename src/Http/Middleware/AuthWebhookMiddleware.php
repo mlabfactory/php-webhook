@@ -39,7 +39,7 @@ class AuthWebhookMiddleware implements MiddlewareInterface
             ->get($uuid);
 
         if($queue === null) {
-            throw new \Exception('Queue not found');
+            throw new \Exception('Queue not found', 404);
         }
         
         return generate_hash($queue);

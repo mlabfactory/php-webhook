@@ -80,8 +80,13 @@ final class Webhook implements RequestEntityInterface {
             $client = new $this->client();
         }
 
+        $headers['headers'] = $this->headers;
+        if(array_key_exists('X-HASH', $headers)) {
+            unset($headers['headers']['X-HASH']);
+        }
+
         /** @var \Mlab\Webhook\Services\Interfaces\Client $client */
-        return $client->request($this->method, $this->path, $this->payload);
+        return $client->request($this->method, $this->path, $this->payload, $headers);
     }
 
 
