@@ -2,25 +2,24 @@
 
 namespace Mlab\Webhook\Http\Controllers;
 
-use Mlab\Webhook\Entities\Webhook;
-use Mlab\Webhook\Services\QueueService;
-use Mlab\Webhook\Entities\Http\HttpRequest;
 use Mlab\Webhook\Helpers\Logger;
+use Mlab\Webhook\Models\WebHook as WebHookModel;
+use Mlab\Webhook\Entities\Webhook;
 use Mlab\Webhook\Helpers\Response;
-use Mlab\Webhook\Repositories\WebHookRepository;
-use Mlab\Webhook\Services\Interfaces\Client;
+use Mlab\Webhook\Services\QueueService;
 use Psr\Http\Message\ResponseInterface;
+use Mlab\Webhook\Entities\Http\HttpRequest;
+use Mlab\Webhook\Services\Interfaces\Client;
+use Mlab\Webhook\Repositories\WebHookRepository;
 
 class WebhookController extends Controller
 {
 
     protected QueueService $queueService;
     protected Client $client;
-    private WebhookRepository $repository;
 
-    public function __construct(QueueService $queueService, Client $client, WebHookRepository $repository)
+    public function __construct(QueueService $queueService, Client $client)
     {
-        $this->repository = $repository;
         parent::__construct($queueService, $client);
     }
 
@@ -77,7 +76,7 @@ class WebhookController extends Controller
      */
     protected function getHttpQueueDomain(string $queueUuid): ?string
     {
-        $queue = $this->repository->findWebHookFromUuid($queueUuid);
+        $queue = WebHookModel::findWebHookFromUuid($queueUuid);
 
         if (empty($queue)) {
             return null;

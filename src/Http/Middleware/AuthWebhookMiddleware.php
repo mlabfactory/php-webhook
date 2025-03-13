@@ -2,9 +2,9 @@
 
 namespace Mlab\Webhook\Http\Middleware;
 
-use Mdf\JsonStorage\Service\DbService;
 use Mlab\Webhook\Entities\Http\HttpRequest;
 use Mlab\Webhook\Helpers\Response;
+use Mlab\Webhook\Models\WebHook;
 
 class AuthWebhookMiddleware implements MiddlewareInterface
 {
@@ -34,10 +34,7 @@ class AuthWebhookMiddleware implements MiddlewareInterface
 
     private function generateHash(string $uuid): string
     {
-        $service = DbService::createInstance(storage_path(), 'queue');
-        $queue = $service->createQuery()
-            ->get($uuid);
-
+        $queue = WebHook::findWebHookFromUuid($uuid);
         if($queue === null) {
             throw new \Exception('Queue not found', 404);
         }

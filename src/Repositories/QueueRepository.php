@@ -4,7 +4,7 @@ namespace Mlab\Webhook\Repositories;
 use Illuminate\Database\ConnectionInterface;
 use Mlab\Webhook\Services\DbServiceConnection;
 
-class QueueRepository {
+class QueueRepository implements RepositoryInterface {
     
     private ConnectionInterface $connection;
 
@@ -22,5 +22,23 @@ class QueueRepository {
      */
     public function create(array $data): void {
         $this->connection->table('failed_jobs')->insert($data);
+    }
+
+    public function find(string $uuid): array {
+        $queue = $this->connection->table('failed_jobs')->where('uuid', $uuid)->first();
+
+        if(empty($queue)) {
+            return [];
+        }
+
+        return (array) $queue;
+    }
+
+    public function update(string $uuid, array $data): void {
+        $this->connection->table('failed_jobs')->where('uuid', $uuid)->update($data);
+    }
+
+    public function delete(string $uuid): void {
+        $this->connection->table('failed_jobs')->where('uuid', $uuid)->delete();
     }
 }

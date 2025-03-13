@@ -1,13 +1,13 @@
 <?php
 namespace Mlab\Webhook\Models\Db;
 
-use Mlab\Webhook\Repositories\QueueRepository;
+use Mlab\Webhook\Repositories\RepositoryInterface;
 
 class Model {
     
-    protected QueueRepository $repository;
+    protected RepositoryInterface $repository;
 
-    public function __construct(QueueRepository $repository)
+    public function __construct(RepositoryInterface $repository)
     {
         $this->repository = $repository;
     }

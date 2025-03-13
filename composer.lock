@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a7d4f6e03808d6d8bc0de414ae1ecca",
+    "content-hash": "c8c47a0799b34d325451a2d25cb2353e",
     "packages": [
         {
             "name": "brick/math",
@@ -2073,44 +2073,6 @@
                 }
             ],
             "time": "2024-11-10T12:42:13+00:00"
-        },
-        {
-            "name": "mdf/json-database-storage",
-            "version": "v0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/marcodefelice/JsonDatabase-storage.git",
-                "reference": "e7d56cf36aa2dbdcee6ddc03d06de3d151490894"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/marcodefelice/JsonDatabase-storage/zipball/e7d56cf36aa2dbdcee6ddc03d06de3d151490894",
-                "reference": "e7d56cf36aa2dbdcee6ddc03d06de3d151490894",
-                "shasum": ""
-            },
-            "require": {
-                "monolog/monolog": "^3.0@dev",
-                "php": ">=7.4",
-                "vlucas/phpdotenv": "5.6.x-dev"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Mdf\\JsonStorage\\": "src/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Marco De Felice",
-                    "email": "marco.defelice890@gmail.com"
-                }
-            ],
-            "description": "Json database storage with PHP",
-            "support": {
-                "source": "https://github.com/marcodefelice/JsonDatabase-storage/tree/v0-alpha1",
-                "issues": "https://github.com/marcodefelice/JsonDatabase-storage/issues"
-            },
-            "time": "2025-03-11T18:26:39+00:00"
         },
         {
             "name": "monolog/monolog",

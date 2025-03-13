@@ -18,8 +18,7 @@
         "doctrine/dbal": "^4.2",
         "illuminate/queue": "^12.0",
         "guzzlehttp/psr7": "^2.7",
-        "illuminate/bus": "^12.1",
-        "mdf/json-database-storage": "v0-alpha1"
+        "illuminate/bus": "^12.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.2"
@@ -38,5 +37,5 @@
             "email": "io@marcodefelice.it"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "alpha"
 }
