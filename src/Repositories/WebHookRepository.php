@@ -26,13 +26,13 @@ class WebHookRepository implements RepositoryInterface {
     }
 
     public function findWebHookFromUuid(string $uuid): array {
-        $this->connection->table(self::TABLE)->where('uuid', $uuid)->first();
+        $queue = $this->connection->table(self::TABLE)->where('uuid', $uuid)->first();
 
         if(empty($queue)) {
             return [];
         }
 
-        return $queue;
+        return (array) $queue;
     }
 
     public function update(string $uuid, array $data): void {
@@ -44,13 +44,13 @@ class WebHookRepository implements RepositoryInterface {
     }
 
     public function find(string $uuid): array {
-        $this->connection->table(self::TABLE)->where('uuid', $uuid)->first();
+        $queue = $this->connection->table(self::TABLE)->where('uuid', $uuid)->first();
 
         if(empty($queue)) {
             return [];
         }
 
-        return $queue;
+        return (array) $queue;
     }
 
 }

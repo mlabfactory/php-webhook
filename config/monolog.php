@@ -36,7 +36,7 @@ $logger = new \Monolog\Logger('php-webhook');
 $logPath = __DIR__.'/../storage/logs/log-'.date("Ymd").'.log';
 $streamHandler = new \Monolog\Handler\StreamHandler($logPath, $logLevel);
 
-$formatter = new \Monolog\Formatter\LineFormatter('[%channel%][%level_name%] %message% %context% %extra%\n');
+$formatter = new \Monolog\Formatter\LineFormatter('[%channel%][%level_name%] %message% %context% %extra%\n\r');
 $formatter->setJsonPrettyPrint(true);
 $formatter->includeStacktraces(true);
 

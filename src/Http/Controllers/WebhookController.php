@@ -38,7 +38,7 @@ class WebhookController extends Controller
     {
         $queue = $this->getHttpQueueDomain($queueId);
         if(is_null($queue)) {
-            return Response::json([],404);
+            return Response::json(["message"=>"no domain found"],404);
         }
 
         try {

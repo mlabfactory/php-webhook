@@ -21,6 +21,7 @@ class QueueService implements ShouldQueue
     private $queue;
     private $batchSize = 10;
     private $processInterval = 60; // secondi
+    protected $queueName = 'default';
 
     protected Client $client;
 

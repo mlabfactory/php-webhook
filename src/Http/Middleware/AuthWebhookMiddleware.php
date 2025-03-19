@@ -2,6 +2,7 @@
 
 namespace Mlab\Webhook\Http\Middleware;
 
+use Illuminate\Support\Facades\Log;
 use Mlab\Webhook\Entities\Http\HttpRequest;
 use Mlab\Webhook\Helpers\Response;
 use Mlab\Webhook\Models\WebHook;
@@ -38,6 +39,8 @@ class AuthWebhookMiddleware implements MiddlewareInterface
         if($queue === null) {
             throw new \Exception('Queue not found', 404);
         }
+
+        \Log::debug('Queue found: ' . generate_hash($queue));
         
         return generate_hash($queue);
     }

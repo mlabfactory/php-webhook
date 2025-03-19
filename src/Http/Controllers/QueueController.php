@@ -20,10 +20,13 @@ class QueueController {
         ];
         WebHook::create($data);
 
+        // get the webhook from the database
+        $queue = WebHook::findWebHookFromUuid($data['uuid']);
+
         return Response::json([
             'message' => 'Queue created successfully',
             'queue' => $data,
-            'hash' => generate_hash($data)
+            'hash' => generate_hash($queue)
         ]);
 
     }
